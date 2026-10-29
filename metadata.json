@@ -1,0 +1,6 @@
+{
+  "name": "The Bryce Zone",
+  "description": "Personal portfolio and website of Bryce Graham featuring photography, favorite books, toolbox, and education experience.",
+  "requestFramePermissions": [],
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
