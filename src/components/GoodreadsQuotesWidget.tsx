@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import React, { useEffect, useRef } from "react"
 
 const GoodreadsQuotesWidget = () => {
   const widgetRef = useRef<HTMLDivElement>(null)
@@ -23,21 +23,32 @@ const GoodreadsQuotesWidget = () => {
   return (
     <div
       style={{
-        padding: "0px 7px",
+        padding: "0.5rem",
+        color: "#f7eed7",
       }}
     >
-      <div id="gr_quote_body" ref={widgetRef}></div>
-      <div style={{ textAlign: "right" }}>
+      <div 
+        id="gr_quote_body" 
+        ref={widgetRef}
+        style={{
+          color: "#f7eed7",
+          lineHeight: 1.7,
+        }}
+      ></div>
+      <div style={{ textAlign: "right", marginTop: "0.75rem" }}>
         <a
           href="https://www.goodreads.com/quotes"
           style={{
-            color: "#382110",
+            color: "#d49a46",
             textDecoration: "none",
-            fontSize: "10px",
+            fontSize: "11px",
+            letterSpacing: "0.04em",
+            fontFamily: "var(--font-sans)",
           }}
           rel="nofollow"
+          target="_blank"
         >
-          Goodreads Quotes
+          Goodreads Quotes Archive ↗
         </a>
       </div>
     </div>

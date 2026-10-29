@@ -7,22 +7,29 @@ const FavoriteBooks = () => {
   return (
     <div className="favorite-books-page">
       <div className="page-header">
-        <h1>Favorite Books</h1>
+        <div className="page-kicker">
+          <span className="page-kicker-icon" aria-hidden="true">📖</span>
+          <span>Curated Reading Room</span>
+        </div>
+        <h1>Favorite Books & Inscriptions</h1>
         <p className="page-subtitle">
-          A collection of books that have shaped my perspective and imagination
+          Volumes on natural philosophy, science fiction, wilderness memoirs, 
+          and foundational engineering that have shaped my worldview.
         </p>
       </div>
 
-      <div className="books-grid">
-        {bookInfo.map((book) => (
-          <Book
-            key={book.title}
-            path={book.path}
-            title={book.title}
-            quote={book.quote}
-            goodreads={book.goodreads}
-          />
-        ))}
+      <div className="books-shelf-frame">
+        <div className="books-grid">
+          {bookInfo.map((book) => (
+            <Book
+              key={book.title}
+              path={book.path}
+              title={book.title}
+              quote={book.quote}
+              goodreads={book.goodreads}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )

@@ -170,17 +170,19 @@ const FlickrLightBox = (props: FlickrLightBoxProps) => {
 
   if (loading) {
     return (
-      <div className={props.className} style={{ textAlign: "center", padding: "3rem" }}>
+      <div className={props.className} style={{ textAlign: "center", padding: "4rem 2rem" }}>
         <div style={{
           display: "inline-block",
-          width: "50px",
-          height: "50px",
-          border: "5px solid rgba(13, 48, 11, 0.2)",
-          borderTopColor: "#0d300b",
+          width: "48px",
+          height: "48px",
+          border: "4px solid rgba(212, 154, 70, 0.2)",
+          borderTopColor: "#d49a46",
           borderRadius: "50%",
           animation: "spin 1s linear infinite",
         }} />
-        <p style={{ marginTop: "1rem", color: "#666" }}>Loading photos...</p>
+        <p style={{ marginTop: "1rem", color: "#9ebd9b", fontFamily: "var(--font-serif, 'Lora', serif)", fontStyle: "italic" }}>
+          Unpacking wilderness exposures...
+        </p>
         <style>{`
           @keyframes spin {
             to { transform: rotate(360deg); }
@@ -193,28 +195,33 @@ const FlickrLightBox = (props: FlickrLightBoxProps) => {
   if (error) {
     return (
       <div className={props.className} style={{
-        padding: "2rem",
-        backgroundColor: "#fee",
-        border: "1px solid #fcc",
-        borderRadius: "8px",
-        textAlign: "center"
+        padding: "2.5rem 2rem",
+        backgroundColor: "rgba(42, 28, 24, 0.85)",
+        border: "1px solid rgba(212, 107, 70, 0.4)",
+        borderRadius: "12px",
+        textAlign: "center",
+        maxWidth: "600px",
+        margin: "2rem auto"
       }}>
-        <h3 style={{ color: "#c33", marginBottom: "0.5rem" }}>Error Loading Photos</h3>
-        <p style={{ color: "#666" }}>{error}</p>
+        <h3 style={{ color: "#f3cc83", marginBottom: "0.75rem", fontFamily: "var(--font-display, 'Cinzel', serif)" }}>
+          Notice from the Field
+        </h3>
+        <p style={{ color: "#d6cfbe", marginBottom: "1.25rem" }}>{error}</p>
         <button
           onClick={() => queryFlickrApi(flickrProps)}
           style={{
-            marginTop: "1rem",
-            padding: "0.5rem 1rem",
-            backgroundColor: "#0d300b",
-            color: "white",
+            padding: "0.65rem 1.5rem",
+            backgroundColor: "#d49a46",
+            color: "#121f15",
             border: "none",
-            borderRadius: "4px",
+            borderRadius: "6px",
             cursor: "pointer",
-            fontSize: "1rem"
+            fontSize: "0.95rem",
+            fontWeight: "600",
+            letterSpacing: "0.02em"
           }}
         >
-          Try Again
+          Retry Connection
         </button>
       </div>
     )
@@ -222,8 +229,8 @@ const FlickrLightBox = (props: FlickrLightBoxProps) => {
 
   if (allImages.length === 0) {
     return (
-      <div className={props.className} style={{ textAlign: "center", padding: "3rem", color: "#666" }}>
-        <p>No photos found</p>
+      <div className={props.className} style={{ textAlign: "center", padding: "3rem", color: "#9ebd9b" }}>
+        <p>No photos found in album.</p>
       </div>
     )
   }
@@ -232,8 +239,8 @@ const FlickrLightBox = (props: FlickrLightBoxProps) => {
 
   return (
     <div className={props.className}>
-      <div style={{ marginBottom: "1rem", color: "#666", fontSize: "0.9rem" }}>
-        Showing {displayedImages.length} of {allImages.length} photos
+      <div style={{ marginBottom: "1.25rem", color: "#9ebd9b", fontSize: "0.9rem", fontFamily: "var(--font-sans)" }}>
+        Showing {displayedImages.length} of {allImages.length} photographs
       </div>
 
       <Gallery
@@ -249,7 +256,7 @@ const FlickrLightBox = (props: FlickrLightBoxProps) => {
           ref={loadMoreRef}
           style={{
             textAlign: "center",
-            padding: "2rem",
+            padding: "2.5rem",
             minHeight: "100px"
           }}
         >
@@ -257,14 +264,14 @@ const FlickrLightBox = (props: FlickrLightBoxProps) => {
             <>
               <div style={{
                 display: "inline-block",
-                width: "40px",
-                height: "40px",
-                border: "4px solid rgba(13, 48, 11, 0.2)",
-                borderTopColor: "#0d300b",
+                width: "36px",
+                height: "36px",
+                border: "3px solid rgba(212, 154, 70, 0.2)",
+                borderTopColor: "#d49a46",
                 borderRadius: "50%",
                 animation: "spin 1s linear infinite",
               }} />
-              <p style={{ marginTop: "0.5rem", color: "#666" }}>Loading more...</p>
+              <p style={{ marginTop: "0.75rem", color: "#9ebd9b", fontSize: "0.88rem" }}>Developing further exposures...</p>
             </>
           )}
         </div>

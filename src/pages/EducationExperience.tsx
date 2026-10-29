@@ -27,9 +27,9 @@ const EducationExperience = () => {
       location: "Idaho Falls, ID",
       period: "Oct. 2021 - Present",
       description: [
-        "Lead developer on Acquisition Transformation Initiative. Designed, built, and integrated a new procurement software for purchasing laboratory materials through partnered vendors",
-        "Built multi-part API service to obtain and build form documents. Circumvented feature limitations in external applications through creative problem solving",
-        "Maintenance/feature enhancements to various internal lab applications as part of the Integration Services team",
+        "Lead developer on Acquisition Transformation Initiative. Designed, built, and integrated a new procurement software for purchasing laboratory materials through partnered vendors.",
+        "Built multi-part API service to obtain and build form documents. Circumvented feature limitations in external applications through creative problem solving.",
+        "Maintenance and feature enhancements to various internal lab applications as part of the Integration Services team.",
       ],
       stack: "C#, .NET Core, MVC, React, Python, Oracle, SQL Server",
     },
@@ -39,9 +39,9 @@ const EducationExperience = () => {
       location: "Idaho Falls, ID",
       period: "Apr. 2019 - Oct. 2021",
       description: [
-        "Developed enterprise level applications for interstate commercial vehicle operations. Improved code reusability and efficiency",
-        "Created new marketable features and integrations including interactive geographical info map",
-        "CVIEW interfaces for law enforcement, UCR registration website, CVSA Emergency Declaration website and IRP Data Repository",
+        "Developed enterprise level applications for interstate commercial vehicle operations. Improved code reusability and efficiency.",
+        "Created new marketable features and integrations including interactive geographical info map.",
+        "CVIEW interfaces for law enforcement, UCR registration website, CVSA Emergency Declaration website and IRP Data Repository.",
       ],
       stack: "C#, React, .NET Core, PostgreSQL, AWS",
     },
@@ -51,9 +51,9 @@ const EducationExperience = () => {
       location: "Idaho Falls, ID",
       period: "Jun. 2016 - Apr. 2019",
       description: [
-        "Developed and maintained large, complex financial web applications using webforms, jQuery, .NET Framework and MySQL as the primary developer",
-        "Custom development work involving debt collection workflows and financial operations. Integrated with 3rd party vendors",
-        "Investigated and addressed exceptions and issues; managed deployment and AWS DevOps; improved code design and efficiency in data importing and reporting",
+        "Developed and maintained large, complex financial web applications using webforms, jQuery, .NET Framework and MySQL as the primary developer.",
+        "Custom development work involving debt collection workflows and financial operations. Integrated with 3rd party vendors.",
+        "Investigated and addressed exceptions and issues; managed deployment and AWS DevOps; improved code design and efficiency in data importing and reporting.",
       ],
       stack: "C#, Web Forms, .NET Framework, MySQL, AWS",
     },
@@ -63,8 +63,8 @@ const EducationExperience = () => {
       location: "Pocatello, ID",
       period: "Feb. 2016 - May 2016",
       description: [
-        "Tutored students in basic to advanced informatics and computer science skills",
-        "Graded classwork and tests",
+        "Tutored students in basic to advanced informatics and computer science skills.",
+        "Graded classwork and algorithmic problem sets.",
       ],
     },
   ]
@@ -72,45 +72,50 @@ const EducationExperience = () => {
   const education: Education[] = [
     {
       school: "Idaho State University",
-      degree: "Bachelor's Degree in Physics",
+      degree: "Bachelor of Science in Physics",
       location: "Pocatello, ID",
       period: "May 2016",
       gpa: "3.8",
       highlights: [
         "Minors in Computer Science & Informatics",
-        "Dean's List",
+        "Dean's List Honoree",
         "Relevant Coursework: Calculus I-III, Linear Algebra, Differential Equations, Engineering Physics I-II, Modern Physics, Advanced Modern Physics, Computer Science and Programming I-II, Computer Organization and Design, Data Structures and Algorithms, Systems Analysis and Design, Networking and Virtualization, Database Management, Systems Development and Implementation Methodologies",
       ],
     },
     {
       school: "Jerome High School",
+      degree: "High School Diploma",
       location: "Jerome, ID",
       period: "Graduated 2012",
       gpa: "4.0",
-      highlights: ["Honors Society", "Valedictorian"],
+      highlights: ["Valedictorian", "National Honors Society"],
     },
   ]
 
   return (
     <div className="edu-exp-page">
       <div className="page-header">
+        <div className="page-kicker">
+          <span className="page-kicker-icon" aria-hidden="true">📜</span>
+          <span>Chronicles & Foundations</span>
+        </div>
         <h1>Education & Experience</h1>
         <blockquote className="page-quote">
           "If I have seen further than others, it is by standing upon the shoulders of giants."
-          <cite>— Isaac Newton</cite>
+          <cite>— Sir Isaac Newton</cite>
         </blockquote>
       </div>
 
       {/* Experience Section */}
       <section className="section">
         <div className="section-title">
-          <span className="section-icon">💼</span>
-          <h2>Professional Experience</h2>
+          <span className="section-icon" aria-hidden="true">🧭</span>
+          <h2>Professional History</h2>
         </div>
         <div className="timeline">
           {experiences.map((exp, index) => (
             <div key={index} className="timeline-item">
-              <div className="timeline-marker"></div>
+              <div className="timeline-marker" aria-hidden="true"></div>
               <div className="timeline-content">
                 <div className="experience-header">
                   <div>
@@ -129,7 +134,7 @@ const EducationExperience = () => {
                 </ul>
                 {exp.stack && (
                   <div className="tech-stack">
-                    <strong>Tech Stack:</strong> {exp.stack}
+                    <strong>Tech Ecosystem:</strong> <span>{exp.stack}</span>
                   </div>
                 )}
               </div>
@@ -141,8 +146,8 @@ const EducationExperience = () => {
       {/* Education Section */}
       <section className="section">
         <div className="section-title">
-          <span className="section-icon">🎓</span>
-          <h2>Education</h2>
+          <span className="section-icon" aria-hidden="true">🎓</span>
+          <h2>Academic Roots</h2>
         </div>
         <div className="education-grid">
           {education.map((edu, index) => (
@@ -154,7 +159,7 @@ const EducationExperience = () => {
               {edu.degree && <div className="edu-degree">{edu.degree}</div>}
               <div className="edu-details">
                 <span className="edu-location">{edu.location}</span>
-                <span className="edu-gpa">GPA: {edu.gpa}</span>
+                <span className="edu-gpa">Cumulative GPA: {edu.gpa}</span>
               </div>
               {edu.highlights && (
                 <ul className="edu-highlights">
@@ -170,12 +175,12 @@ const EducationExperience = () => {
 
       {/* Download Resume CTA */}
       <div className="resume-cta">
-        <p>Want a traditional resume format?</p>
+        <p>Looking for a formal résumé or interested in discussing a project?</p>
         <a 
           href="mailto:bryce.dgraham@outlook.com" 
           className="contact-button"
         >
-          Contact Me
+          ✉ Get in Touch
         </a>
       </div>
     </div>

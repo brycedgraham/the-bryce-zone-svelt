@@ -7,11 +7,11 @@ const Nav = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
-    { to: "/", label: "Home", icon: "🏠" },
-    { to: "/Toolbox", label: "Toolbox", icon: "🔧" },
-    { to: "/Experience", label: "Experience", icon: "🎓" },
+    { to: "/", label: "Home Base", icon: "🌲" },
+    { to: "/Toolbox", label: "Toolbox", icon: "🪵" },
+    { to: "/Experience", label: "Experience", icon: "📜" },
     { to: "/Photography", label: "Photography", icon: "📷" },
-    { to: "/FavoriteBooks", label: "Favorite Books", icon: "📚" },
+    { to: "/FavoriteBooks", label: "Favorite Books", icon: "📖" },
   ]
 
   const isActive = (path: string) => {
@@ -27,16 +27,23 @@ const Nav = () => {
       <button
         className="mobile-menu-btn"
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle menu"
+        aria-label="Toggle navigation menu"
       >
         <span className={`hamburger ${isOpen ? "open" : ""}`}></span>
       </button>
 
       {/* Sidebar */}
-      <nav className={`sidebar ${isOpen ? "open" : ""}`}>
+      <nav className={`sidebar ${isOpen ? "open" : ""}`} aria-label="Main Navigation">
         <div className="sidebar-header">
-          <h2>Menu</h2>
+          <div className="sidebar-brand-emblem">
+            <span className="brand-leaf-icon" aria-hidden="true">🌿</span>
+            <div className="brand-text-block">
+              <span className="brand-kicker">Field Journal</span>
+              <h2>Bryce Graham</h2>
+            </div>
+          </div>
         </div>
+
         <ul className="nav-list">
           {navItems.map((item) => (
             <li key={item.to}>
@@ -45,17 +52,29 @@ const Nav = () => {
                 className={isActive(item.to) ? "active" : ""}
                 onClick={() => setIsOpen(false)}
               >
-                <span className="nav-icon">{item.icon}</span>
+                <span className="nav-icon" aria-hidden="true">{item.icon}</span>
                 <span className="nav-label">{item.label}</span>
+                {isActive(item.to) && <span className="active-dot" aria-hidden="true"></span>}
               </Link>
             </li>
           ))}
         </ul>
+
+        <div className="sidebar-footer">
+          <div className="field-notes-badge">
+            <span className="badge-title">The Naturalist's Study</span>
+            <span className="badge-subtitle">Woodland & Digital Craft</span>
+          </div>
+        </div>
       </nav>
 
       {/* Overlay for mobile */}
       {isOpen && (
-        <div className="sidebar-overlay" onClick={() => setIsOpen(false)} />
+        <div 
+          className="sidebar-overlay" 
+          onClick={() => setIsOpen(false)}
+          aria-hidden="true" 
+        />
       )}
     </>
   )

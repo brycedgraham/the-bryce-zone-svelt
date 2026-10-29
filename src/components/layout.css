@@ -1,4 +1,4 @@
-/* Modern Layout Styles */
+/* Rustic, Forest & Earthy Layout Styles */
 
 * {
   box-sizing: border-box;
@@ -6,87 +6,109 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  background-color: #0e1711;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(55, 87, 59, 0.22) 0%, transparent 40%),
+    radial-gradient(circle at 90% 85%, rgba(120, 83, 48, 0.16) 0%, transparent 45%),
+    linear-gradient(170deg, #0e1711 0%, #132017 40%, #19281d 75%, #0f1812 100%);
   background-attachment: fixed;
-  color: #e0e0e0;
-  line-height: 1.6;
+  color: #e3ded1;
+  line-height: 1.65;
 }
 
 .app-container {
   display: flex;
   min-height: 100vh;
+  position: relative;
 }
 
 .main-wrapper {
   flex: 1;
-  margin-left: 240px;
+  margin-left: 250px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   transition: margin-left 0.3s ease;
-  width: calc(100% - 240px);
+  width: calc(100% - 250px);
+  position: relative;
 }
 
-/* Header Styles */
+/* Header Styles - Rustic Forest Lodge Canopy */
 .site-header {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: rgba(16, 26, 18, 0.88);
+  box-shadow: 0 4px 24px rgba(6, 12, 8, 0.45);
+  border-bottom: 1px solid rgba(138, 171, 133, 0.16);
   position: sticky;
   top: 0;
   z-index: 100;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .header-content {
-  padding: 1.5rem 2rem;
+  padding: 1.25rem 2.25rem;
   max-width: 1400px;
   margin: 0 auto;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .site-title {
   margin: 0;
-  font-size: 2rem;
+  font-family: var(--font-display, 'Cinzel', serif);
+  font-size: 1.75rem;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .site-title a {
-  color: #fff;
+  color: #f7eed7;
   text-decoration: none;
   transition: all 0.3s ease;
-  display: inline-block;
-  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #f7eed7 0%, #e0aa53 45%, #92bc8c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .site-title a:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.2);
+  filter: brightness(1.18);
+  transform: translateY(-1px);
+}
+
+.site-tagline {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: #9ebd9b;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
 .header-accent {
   position: absolute;
   bottom: 0;
-  left: 2rem;
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, #4ecdc4 0%, #44a08d 100%);
-  border-radius: 2px;
+  left: 2.25rem;
+  width: 72px;
+  height: 2px;
+  background: linear-gradient(90deg, #d49a46 0%, #6b9369 100%);
+  border-radius: 1px;
 }
 
 /* Main Content */
 .main-content {
   flex: 1;
-  padding: 2rem;
-  max-width: 1400px;
+  padding: 2.5rem;
+  max-width: 1360px;
   width: 100%;
   margin: 0 auto;
   animation: fadeIn 0.4s ease;
@@ -95,7 +117,7 @@ body {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -107,74 +129,98 @@ body {
 .main-content h2,
 .main-content h3,
 .main-content h4 {
-  color: #fff;
+  font-family: var(--font-serif, 'Lora', serif);
+  color: #f7f4ed;
   margin-top: 0;
   font-weight: 600;
 }
 
 .main-content h4 {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: #e3ded1;
   font-weight: 400;
   font-style: italic;
 }
 
 .main-content a {
-  color: #4ecdc4;
+  color: #d49a46;
   text-decoration: none;
   transition: all 0.2s ease;
   border-bottom: 1px solid transparent;
 }
 
 .main-content a:hover {
-  color: #44a08d;
-  border-bottom-color: #44a08d;
+  color: #f3cc83;
+  border-bottom-color: rgba(243, 204, 131, 0.4);
 }
 
-/* Footer */
+/* Rustic Footer */
 .site-footer {
-  background: rgba(26, 26, 46, 0.8);
-  padding: 1.5rem 2rem;
+  background: rgba(14, 22, 16, 0.92);
+  padding: 1.75rem 2rem;
   text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(138, 171, 133, 0.14);
   margin-top: auto;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .site-footer p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.9rem;
+  color: #9ea59a;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
 }
 
 .site-footer a {
-  color: #4ecdc4;
+  color: #d49a46;
   text-decoration: none;
+  font-weight: 500;
   transition: color 0.2s ease;
 }
 
 .site-footer a:hover {
-  color: #44a08d;
+  color: #f3cc83;
+  text-decoration: underline;
+}
+
+/* Card-like Sections with Rustic Wood & Moss Aesthetic */
+.content-card {
+  background: rgba(24, 38, 28, 0.75);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 24px rgba(8, 15, 10, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(138, 171, 133, 0.18);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.content-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 154, 70, 0.35);
+  box-shadow: 0 10px 32px rgba(9, 17, 11, 0.45);
 }
 
 /* Responsive Design */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 820px) {
   .main-wrapper {
     margin-left: 0;
     width: 100%;
   }
 
   .header-content {
-    padding: 1rem 1.5rem;
+    padding: 1.1rem 1.5rem;
   }
 
   .site-title {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
   }
 
   .main-content {
-    padding: 1.5rem 1rem;
+    padding: 1.75rem 1.25rem;
   }
 
   .header-accent {
@@ -182,33 +228,12 @@ body {
   }
 }
 
-/* Card-like sections */
-.content-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.content-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-}
-
 /* Utility classes */
-.text-center {
-  text-align: center;
-}
-
+.text-center { text-align: center; }
 .mt-1 { margin-top: 0.5rem; }
 .mt-2 { margin-top: 1rem; }
 .mt-3 { margin-top: 1.5rem; }
 .mt-4 { margin-top: 2rem; }
-
 .mb-1 { margin-bottom: 0.5rem; }
 .mb-2 { margin-bottom: 1rem; }
 .mb-3 { margin-bottom: 1.5rem; }

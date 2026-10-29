@@ -1,40 +1,48 @@
-/* Modern Book Component Styles */
+/* Rustic, Forest & Earthy Book Component Styles */
 
 .book-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .book-card {
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
   border-radius: 8px;
   overflow: hidden;
   height: auto;
+  box-shadow: 0 6px 18px rgba(4, 8, 5, 0.45);
+  border: 1px solid rgba(138, 171, 133, 0.16);
+  background: #141f17;
 }
 
+.book-card:hover,
 .book-card.hovered {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(212, 154, 70, 0.3);
+  border-color: rgba(212, 154, 70, 0.4);
 }
 
 .book-cover {
   position: relative;
   width: 100%;
-  height: auto;
+  aspect-ratio: 2 / 3;
   overflow: hidden;
-  border-radius: 8px;
-  background: #1a1a2e;
+  background: #141f17;
 }
 
 .book-cover img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
+  transition: transform 0.4s ease, filter 0.4s ease;
 }
 
 .book-card:hover .book-cover img {
-  transform: scale(1.05);
-  filter: brightness(0.7);
+  transform: scale(1.06);
+  filter: brightness(0.65) contrast(1.05);
 }
 
 .book-overlay {
@@ -42,11 +50,11 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
-  padding: 1.5rem 1rem 1rem;
+  background: linear-gradient(to top, rgba(10, 18, 12, 0.96) 0%, rgba(16, 28, 20, 0.85) 60%, transparent 100%);
+  padding: 1.75rem 1rem 1rem;
   transform: translateY(100%);
-  transition: transform 0.3s ease;
-  color: white;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #f7eed7;
 }
 
 .book-card:hover .book-overlay {
@@ -54,61 +62,76 @@
 }
 
 .book-title {
-  font-size: 1rem;
+  font-family: var(--font-serif, 'Lora', serif);
+  font-size: 0.95rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #fff;
-  line-height: 1.3;
+  margin-bottom: 0.35rem;
+  color: #fff9ed;
+  line-height: 1.35;
 }
 
 .book-hint {
-  font-size: 0.85rem;
-  color: #4ecdc4;
-  opacity: 0.9;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: #e0aa53;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
-/* Quote Modal */
+.book-container a {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: #d49a46;
+  text-align: center;
+  transition: color 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.book-container a:hover {
+  color: #f3cc83;
+  text-decoration: underline;
+}
+
+/* Quote Modal - Archival Nature Journal Style */
 .quote-modal {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(6, 12, 8, 0.88);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  padding: 1rem;
-  animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  padding: 1.25rem;
+  animation: fadeIn 0.25s ease;
 }
 
 .quote-content {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: linear-gradient(145deg, #1a2a1f 0%, #132017 65%, #181f18 100%);
   border-radius: 16px;
-  padding: 2.5rem;
-  max-width: 600px;
+  padding: 2.75rem 2.5rem;
+  max-width: 620px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(212, 163, 89, 0.3);
   position: relative;
-  animation: slideUp 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(138, 171, 133, 0.25);
 }
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.95);
+    transform: translateY(20px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -118,14 +141,14 @@
 
 .quote-close {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  font-size: 2rem;
-  width: 40px;
-  height: 40px;
+  top: 1.15rem;
+  right: 1.15rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(138, 171, 133, 0.2);
+  color: #f7eed7;
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -136,43 +159,47 @@
 }
 
 .quote-close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(212, 154, 70, 0.25);
+  border-color: #d49a46;
+  color: #fff;
   transform: rotate(90deg);
 }
 
 .quote-content h3 {
-  margin: 0 0 1.5rem;
-  color: #4ecdc4;
-  font-size: 1.5rem;
+  margin: 0 0 1.25rem;
+  font-family: var(--font-display, 'Cinzel', serif);
+  color: #f7eed7;
+  font-size: 1.45rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
+  padding-right: 2rem;
 }
 
 .quote-content blockquote {
   margin: 0;
   padding: 0;
-  font-size: 1.1rem;
+  font-family: var(--font-serif, 'Lora', Georgia, serif);
+  font-size: 1.15rem;
   line-height: 1.8;
-  color: rgba(255, 255, 255, 0.9);
+  color: #e9e4d7;
   font-style: italic;
   position: relative;
   padding-left: 1.5rem;
-  border-left: 3px solid #4ecdc4;
+  border-left: 3px solid #d49a46;
 }
 
 /* Mobile Responsive */
 @media screen and (max-width: 768px) {
   .quote-content {
     padding: 2rem 1.5rem;
-    margin: 1rem;
   }
 
   .quote-content h3 {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     margin-bottom: 1rem;
-    padding-right: 2rem;
   }
 
   .quote-content blockquote {
-    font-size: 1rem;
+    font-size: 1.02rem;
   }
 }

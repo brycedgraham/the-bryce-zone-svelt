@@ -16,52 +16,55 @@ const Toolbox = () => {
   const skillCategories: SkillCategory[] = [
     {
       title: "Languages & Frameworks",
-      icon: "💻",
+      icon: "🌲",
       skills: [
+        { name: "C#" },
+        { name: "TypeScript" },
+        { name: "JavaScript" },
+        { name: "React" },
+        { name: "ASP.NET Core" },
         { name: "Linux" },
         { name: "Docker" },
-        { name: "C#" },
-        { name: "JavaScript" },
-        { name: "TypeScript" },
-        { name: "HTML" },
-        { name: "CSS" },
-        { name: "ASP.NET" },
-        { name: "React" },
+        { name: "HTML5" },
+        { name: "CSS3 / Modern CSS" },
       ],
     },
     {
-      title: "Databases",
-      icon: "🗄️",
+      title: "Databases & Storage",
+      icon: "🪨",
       skills: [
-        { name: "MySQL" },
         { name: "PostgreSQL" },
-        { name: "MSSQL" },
-        { name: "Elastic Search" },
+        { name: "MySQL" },
+        { name: "MSSQL / SQL Server" },
+        { name: "Oracle DB" },
+        { name: "Elasticsearch" },
       ],
     },
     {
-      title: "Tools & IDEs",
+      title: "Tools & Workbench",
       icon: "🛠️",
       skills: [
-        { name: "Visual Studio" },
         { name: "VS Code" },
-        { name: "HeidiSQL" },
+        { name: "Visual Studio" },
         { name: "DBeaver" },
+        { name: "HeidiSQL" },
         { name: "Postman" },
+        { name: "Terminal / Bash" },
       ],
     },
     {
       title: "Cloud & Infrastructure",
-      icon: "☁️",
+      icon: "⛰️",
       skills: [
         { name: "AWS" },
         { name: "IIS" },
-        { name: "Azure TFS" },
+        { name: "Azure DevOps / TFS" },
+        { name: "Docker Containers" },
       ],
     },
     {
-      title: "Version Control",
-      icon: "🔀",
+      title: "Version Control & Workflow",
+      icon: "🧭",
       skills: [
         { name: "Git" },
         { name: "GitHub" },
@@ -70,14 +73,14 @@ const Toolbox = () => {
       ],
     },
     {
-      title: "APIs & Integration",
-      icon: "🔌",
+      title: "APIs & Systems Integration",
+      icon: "🌿",
       skills: [
-        { name: "REST APIs" },
+        { name: "RESTful APIs" },
         { name: "JSON / XML" },
         { name: "Swagger / OpenAPI" },
-        { name: "CI/CD" },
-        { name: "Windows PowerShell" },
+        { name: "CI/CD Pipelines" },
+        { name: "PowerShell" },
       ],
     },
   ]
@@ -85,14 +88,18 @@ const Toolbox = () => {
   return (
     <div className="toolbox-page">
       <div className="toolbox-header">
-        <h1>Technical Toolbox</h1>
+        <div className="page-kicker">
+          <span className="page-kicker-icon" aria-hidden="true">🪵</span>
+          <span>The Artisan's Workbench</span>
+        </div>
+        <h1>Technical Toolbox & Craft</h1>
         <blockquote className="toolbox-quote">
-          "It is a mistake to think you can solve any major problems just with
-          potatoes."
+          "It is a mistake to think you can solve any major problems just with potatoes."
           <cite>— Douglas Adams</cite>
         </blockquote>
         <p className="toolbox-intro">
-          A comprehensive overview of technologies, tools, and frameworks I work with
+          A comprehensive catalog of tools, languages, and dependable frameworks 
+          honed across years of production engineering.
         </p>
       </div>
 
@@ -100,7 +107,7 @@ const Toolbox = () => {
         {skillCategories.map((category) => (
           <div key={category.title} className="skill-category">
             <div className="category-header">
-              <span className="category-icon">{category.icon}</span>
+              <span className="category-icon" aria-hidden="true">{category.icon}</span>
               <h2>{category.title}</h2>
             </div>
             <div className="skills-list">
@@ -116,7 +123,7 @@ const Toolbox = () => {
 
       <div className="toolbox-footer">
         <p>
-          Always learning and expanding my toolkit with new technologies and best practices.
+          🌲 Honoring clean craftsmanship, durable architecture, and continuous learning from the roots up.
         </p>
       </div>
     </div>
