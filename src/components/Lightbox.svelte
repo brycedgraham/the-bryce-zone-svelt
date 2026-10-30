@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-
   export interface Slide {
     src: string;
     title?: string;
@@ -20,25 +18,41 @@
   let isZoomed = $state(false);
   let touchStartX = $state(0);
   let touchEndX = $state(0);
+  let thumbnailStrip = $state<HTMLDivElement | null>(null);
+
+  // Portal action: moves lightbox to document.body so it attaches to the true window
+  // immune to any parent CSS transform, filter, or backdrop-filter containing blocks.
+  function portal(node: HTMLElement) {
+    document.body.appendChild(node);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return {
+      destroy() {
+        if (node.parentNode) {
+          node.parentNode.removeChild(node);
+        }
+        document.body.style.overflow = originalOverflow;
+      },
+    };
+  }
 
   function prevSlide() {
     if (index > 0) {
       index -= 1;
-      isZoomed = false;
     } else {
       index = slides.length - 1;
-      isZoomed = false;
     }
+    isZoomed = false;
   }
 
   function nextSlide() {
     if (index < slides.length - 1) {
       index += 1;
-      isZoomed = false;
     } else {
       index = 0;
-      isZoomed = false;
     }
+    isZoomed = false;
   }
 
   function handleKeydown(e: KeyboardEvent) {
@@ -64,108 +78,154 @@
       prevSlide();
     }
   }
+
+  // Auto-scroll active thumbnail into view
+  $effect(() => {
+    if (index >= 0 && thumbnailStrip) {
+      const activeThumb = thumbnailStrip.children[index] as HTMLElement | undefined;
+      if (activeThumb) {
+        activeThumb.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest",
+        });
+      }
+    }
+  });
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
 
 {#if index >= 0 && slides[index]}
   <div
+    use:portal
     class="svelte-lightbox-overlay"
     onclick={onclose}
     role="dialog"
     aria-modal="true"
     aria-label="High-resolution image lightbox"
   >
-    <!-- Top Bar Controls -->
-    <div class="lightbox-top-bar" onclick={(e) => e.stopPropagation()}>
-      <div class="lightbox-counter">
-        <span>{index + 1}</span> / <span>{slides.length}</span>
+    <!-- Top Header Bar -->
+    <div class="lightbox-header" onclick={(e) => e.stopPropagation()}>
+      <div class="lightbox-meta">
+        <span class="slide-count">
+          <strong>{index + 1}</strong> <span class="sep">/</span> {slides.length}
+        </span>
+        {#if slides[index].title}
+          <span class="slide-title-header">{slides[index].title}</span>
+        {/if}
       </div>
 
-      <div class="lightbox-actions">
+      <div class="lightbox-toolbar">
         <button
-          class="lightbox-btn"
+          class="tool-btn"
           onclick={() => (isZoomed = !isZoomed)}
-          title={isZoomed ? "Zoom Out" : "Zoom In"}
+          title={isZoomed ? "Reset Zoom" : "Zoom Image"}
           aria-label="Toggle zoom"
         >
-          {isZoomed ? "−" : "+"}
+          {#if isZoomed}
+            <span class="btn-icon">🔍−</span>
+          {:else}
+            <span class="btn-icon">🔍+</span>
+          {/if}
         </button>
         <button
-          class="lightbox-btn close-btn"
+          class="tool-btn close-btn"
           onclick={onclose}
           title="Close Lightbox (Esc)"
-          aria-label="Close"
+          aria-label="Close lightbox"
         >
           ✕
         </button>
       </div>
     </div>
 
-    <!-- Main Viewport Area -->
+    <!-- Main Canvas / Image Stage -->
     <div
       class="lightbox-stage"
-      onclick={(e) => e.stopPropagation()}
       ontouchstart={handleTouchStart}
       ontouchend={handleTouchEnd}
     >
-      <!-- Navigation Prev -->
+      <!-- Left Prev Button -->
       <button
-        class="lightbox-nav-btn prev"
-        onclick={prevSlide}
+        class="nav-arrow nav-prev"
+        onclick={(e) => {
+          e.stopPropagation();
+          prevSlide();
+        }}
         aria-label="Previous photograph"
-        title="Previous"
+        title="Previous (Left Arrow)"
       >
-        ‹
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
       </button>
 
-      <!-- Center Image -->
-      <div class="lightbox-image-wrap" class:zoomed={isZoomed}>
+      <!-- Center Image Container -->
+      <div
+        class="image-frame"
+        class:is-zoomed={isZoomed}
+        onclick={(e) => {
+          // If clicked on backdrop outside image, close
+          if (e.target === e.currentTarget) {
+            onclose();
+          }
+        }}
+      >
         <img
           src={slides[index].src}
           alt={slides[index].alt || "Wilderness photograph"}
-          class="lightbox-main-img"
-          onclick={() => (isZoomed = !isZoomed)}
+          class="lightbox-image"
+          onclick={(e) => {
+            e.stopPropagation();
+            isZoomed = !isZoomed;
+          }}
           loading="eager"
         />
+
         {#if slides[index].title}
-          <div class="lightbox-caption">
+          <div class="image-caption" onclick={(e) => e.stopPropagation()}>
             <p>{slides[index].title}</p>
           </div>
         {/if}
       </div>
 
-      <!-- Navigation Next -->
+      <!-- Right Next Button -->
       <button
-        class="lightbox-nav-btn next"
-        onclick={nextSlide}
+        class="nav-arrow nav-next"
+        onclick={(e) => {
+          e.stopPropagation();
+          nextSlide();
+        }}
         aria-label="Next photograph"
-        title="Next"
+        title="Next (Right Arrow)"
       >
-        ›
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
       </button>
     </div>
 
-    <!-- Bottom Thumbnail Strip -->
+    <!-- Bottom Thumbnail Carousel -->
     <div
-      class="lightbox-thumbnails"
+      class="lightbox-footer"
       onclick={(e) => e.stopPropagation()}
-      role="region"
-      aria-label="Photo thumbnails"
     >
-      {#each slides as slide, i}
-        <button
-          class="thumb-item"
-          class:active={i === index}
-          onclick={() => {
-            index = i;
-            isZoomed = false;
-          }}
-          aria-label={`Go to photo ${i + 1}`}
-        >
-          <img src={slide.src} alt={slide.title || `Thumbnail ${i + 1}`} loading="lazy" />
-        </button>
-      {/each}
+      <div class="thumbnail-strip" bind:this={thumbnailStrip} role="region" aria-label="Photo thumbnails">
+        {#each slides as slide, i}
+          <button
+            class="thumb-tile"
+            class:is-active={i === index}
+            onclick={() => {
+              index = i;
+              isZoomed = false;
+            }}
+            aria-label={`View photo ${i + 1}`}
+          >
+            <img src={slide.src} alt={slide.title || `Thumbnail ${i + 1}`} loading="lazy" />
+          </button>
+        {/each}
+      </div>
     </div>
   </div>
 {/if}
@@ -173,210 +233,283 @@
 <style>
   .svelte-lightbox-overlay {
     position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background-color: rgba(9, 15, 11, 0.94);
-    backdrop-filter: blur(12px);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    background-color: rgba(5, 9, 6, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: lightboxFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    overflow: hidden;
   }
 
-  .lightbox-top-bar {
+  @keyframes lightboxFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Header Bar */
+  .lightbox-header {
+    height: 60px;
+    padding: 0 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 1.5rem;
-    background: linear-gradient(to bottom, rgba(10, 16, 12, 0.85), transparent);
-    z-index: 10;
+    background: linear-gradient(180deg, rgba(6, 10, 7, 0.92) 0%, rgba(6, 10, 7, 0.3) 80%, transparent 100%);
+    z-index: 20;
+    flex-shrink: 0;
   }
 
-  .lightbox-counter {
-    color: #c7d8be;
+  .lightbox-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    color: #e5dfcf;
     font-family: var(--font-sans);
-    font-size: 0.9rem;
+    font-size: 0.92rem;
+  }
+
+  .slide-count {
+    color: #d49a46;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.05em;
+    font-weight: 600;
   }
 
-  .lightbox-actions {
+  .slide-count .sep {
+    color: #8fa08e;
+    margin: 0 2px;
+  }
+
+  .slide-title-header {
+    color: #c7d8be;
+    font-size: 0.88rem;
+    max-width: 450px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lightbox-toolbar {
     display: flex;
-    gap: 0.75rem;
+    align-items: center;
+    gap: 0.6rem;
   }
 
-  .lightbox-btn {
-    background: rgba(26, 42, 31, 0.8);
-    border: 1px solid rgba(138, 171, 133, 0.3);
+  .tool-btn {
+    background: rgba(22, 36, 26, 0.85);
+    border: 1px solid rgba(138, 171, 133, 0.25);
     color: #f7eed7;
     width: 40px;
     height: 40px;
     border-radius: 8px;
-    font-size: 1.25rem;
-    display: flex;
+    font-size: 1.15rem;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
   }
 
-  .lightbox-btn:hover {
-    background: #d49a46;
-    color: #101c13;
-    border-color: #d49a46;
-  }
-
-  .lightbox-stage {
-    position: relative;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 1rem;
-    overflow: hidden;
-  }
-
-  .lightbox-nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(20, 34, 25, 0.7);
-    color: #f0ece1;
-    border: 1px solid rgba(138, 171, 133, 0.25);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    font-size: 2.25rem;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.2s ease;
-  }
-
-  .lightbox-nav-btn:hover {
+  .tool-btn:hover {
     background: #d49a46;
     color: #0e1711;
     border-color: #d49a46;
+    transform: translateY(-1px);
   }
 
-  .lightbox-nav-btn.prev {
-    left: 1.5rem;
+  .tool-btn.close-btn {
+    font-size: 1.2rem;
   }
 
-  .lightbox-nav-btn.next {
-    right: 1.5rem;
+  /* Stage Viewport */
+  .lightbox-stage {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    height: calc(100vh - 150px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
-  .lightbox-image-wrap {
-    max-width: 90vw;
-    max-height: 75vh;
+  .image-frame {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 0.5rem 1rem;
+    cursor: default;
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .lightbox-image-wrap.zoomed {
-    transform: scale(1.4);
-    cursor: zoom-out;
-  }
-
-  .lightbox-main-img {
-    max-width: 100%;
-    max-height: 68vh;
+  .lightbox-image {
+    max-width: 92vw;
+    max-height: calc(100vh - 170px);
+    width: auto;
+    height: auto;
     object-fit: contain;
     border-radius: 6px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
     cursor: zoom-in;
-    user-select: none;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .lightbox-caption {
+  .image-frame.is-zoomed .lightbox-image {
+    transform: scale(1.45);
+    cursor: zoom-out;
+    max-height: none;
+    max-width: none;
+  }
+
+  .image-caption {
     margin-top: 0.75rem;
-    background: rgba(18, 30, 22, 0.85);
-    padding: 0.4rem 1rem;
+    background: rgba(14, 24, 17, 0.88);
+    border: 1px solid rgba(138, 171, 133, 0.25);
     border-radius: 6px;
-    border: 1px solid rgba(138, 171, 133, 0.2);
-    color: #e5dfcf;
-    font-size: 0.88rem;
-    font-family: var(--font-sans);
+    padding: 0.35rem 1rem;
+    color: #f7eed7;
+    font-family: var(--font-serif, "Lora", Georgia, serif);
+    font-size: 0.9rem;
     text-align: center;
-    max-width: 600px;
+    max-width: 700px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   }
 
-  .lightbox-thumbnails {
+  .image-caption p {
+    margin: 0;
+  }
+
+  /* Nav Arrows */
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(18, 30, 22, 0.75);
+    color: #f7eed7;
+    border: 1px solid rgba(138, 171, 133, 0.25);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
     display: flex;
-    gap: 0.5rem;
-    padding: 1rem 1.5rem;
-    background: linear-gradient(to top, rgba(10, 16, 12, 0.9), transparent);
-    overflow-x: auto;
+    align-items: center;
     justify-content: center;
+    cursor: pointer;
+    z-index: 30;
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+
+  .nav-arrow:hover {
+    background: #d49a46;
+    color: #0e1711;
+    border-color: #d49a46;
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .nav-arrow.nav-prev {
+    left: 1.5rem;
+  }
+
+  .nav-arrow.nav-next {
+    right: 1.5rem;
+  }
+
+  /* Footer & Thumbnail Strip */
+  .lightbox-footer {
+    height: 80px;
+    background: linear-gradient(0deg, rgba(6, 10, 7, 0.95) 0%, rgba(6, 10, 7, 0.5) 80%, transparent 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    flex-shrink: 0;
+    z-index: 20;
+  }
+
+  .thumbnail-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    max-width: 90vw;
+    padding: 4px;
     scrollbar-width: thin;
     scrollbar-color: #2b4231 transparent;
   }
 
-  .thumb-item {
-    background: transparent;
+  .thumb-tile {
+    width: 60px;
+    height: 44px;
+    border-radius: 4px;
     border: 2px solid transparent;
-    border-radius: 6px;
     padding: 0;
-    cursor: pointer;
-    width: 64px;
-    height: 48px;
+    background: #111a13;
     overflow: hidden;
+    cursor: pointer;
     flex-shrink: 0;
-    opacity: 0.55;
+    opacity: 0.5;
     transition: all 0.2s ease;
   }
 
-  .thumb-item:hover {
+  .thumb-tile:hover {
     opacity: 0.85;
   }
 
-  .thumb-item.active {
+  .thumb-tile.is-active {
     opacity: 1;
     border-color: #d49a46;
-    box-shadow: 0 0 8px rgba(212, 154, 70, 0.4);
+    box-shadow: 0 0 10px rgba(212, 154, 70, 0.5);
+    transform: scale(1.05);
   }
 
-  .thumb-item img {
+  .thumb-tile img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
   @media (max-width: 768px) {
-    .lightbox-nav-btn {
-      width: 40px;
-      height: 40px;
-      font-size: 1.75rem;
+    .lightbox-header {
+      padding: 0 1rem;
+      height: 52px;
     }
-    .lightbox-nav-btn.prev {
+    .slide-title-header {
+      display: none;
+    }
+    .nav-arrow {
+      width: 42px;
+      height: 42px;
+    }
+    .nav-arrow.nav-prev {
       left: 0.5rem;
     }
-    .lightbox-nav-btn.next {
+    .nav-arrow.nav-next {
       right: 0.5rem;
     }
-    .lightbox-thumbnails {
-      justify-content: flex-start;
-      padding: 0.75rem 1rem;
+    .lightbox-image {
+      max-width: 96vw;
+      max-height: calc(100vh - 150px);
     }
-    .thumb-item {
-      width: 52px;
-      height: 40px;
+    .thumb-tile {
+      width: 48px;
+      height: 36px;
     }
   }
 </style>
