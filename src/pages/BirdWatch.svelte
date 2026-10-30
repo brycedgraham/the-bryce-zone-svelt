@@ -1438,6 +1438,7 @@
   function handleResize() {
     if (!canvas || !container) return;
     const rect = container.getBoundingClientRect();
+    if (rect.width < 820) return;
     canvas.width = Math.floor(rect.width);
     canvas.height = Math.floor(Math.min(window.innerHeight * 0.72, rect.width * (476 / 910), 620));
     initForest(canvas.width, canvas.height);
@@ -1470,8 +1471,31 @@
 </script>
 
 <div class="birdwatch-page" bind:this={container}>
-  <!-- Top Control HUD Bar -->
-  <header class="camera-hud-bar">
+  <!-- Mobile notice: Informs mobile visitors that telephoto viewfinder requires desktop mouse -->
+  <div class="mobile-notice-card">
+    <div class="notice-emblem" aria-hidden="true">🔭</div>
+    <span class="notice-kicker">Desktop Telephoto Sanctuary</span>
+    <h2 class="notice-title">Bird Watch Minigame</h2>
+    <p class="notice-desc">
+      The telephoto camera viewfinder relies on precision cursor optics and motion tracking designed specifically for a desktop or laptop mouse.
+    </p>
+    <p class="notice-sub">
+      Please visit from a computer to explore the woodland canopy and photograph wild birds!
+    </p>
+    <div class="notice-actions">
+      <a href="/Photography" class="notice-btn primary">
+        📷 View Nature Photography
+      </a>
+      <a href="/" class="notice-btn secondary">
+        🌲 Return to Home Base
+      </a>
+    </div>
+  </div>
+
+  <!-- Desktop Game Layout -->
+  <div class="desktop-expedition-wrap">
+    <!-- Top Control HUD Bar -->
+    <header class="camera-hud-bar">
     <div class="hud-left">
       <div class="hud-brand">
         <span class="hud-camera-icon" aria-hidden="true">📷</span>
@@ -1717,6 +1741,7 @@
       </div>
     {/if}
   </section>
+  </div> <!-- end desktop-expedition-wrap -->
 
   <!-- High-Res Photo Lightbox Inspection Modal -->
   {#if inspectedPhoto}
@@ -2572,32 +2597,108 @@
     }
   }
 
-  /* Responsive Rules */
-  @media (max-width: 900px) {
-    .camera-hud-bar {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
+  /* Mobile Notice Card */
+  .mobile-notice-card {
+    display: none;
+    background: rgba(18, 29, 21, 0.9);
+    border: 1px solid rgba(138, 171, 133, 0.3);
+    border-radius: 18px;
+    padding: 2.75rem 1.75rem;
+    text-align: center;
+    max-width: 480px;
+    margin: 3rem auto 2rem;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(12px);
+    animation: fadeIn 0.4s ease;
+  }
+
+  .notice-emblem {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .notice-kicker {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #d49a46;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .notice-title {
+    font-family: var(--font-display, "Cinzel", serif);
+    font-size: 1.65rem;
+    color: #f7eed7;
+    margin: 0 0 0.85rem;
+  }
+
+  .notice-desc {
+    font-size: 0.92rem;
+    color: #d1dfcc;
+    line-height: 1.6;
+    margin: 0 0 0.75rem;
+  }
+
+  .notice-sub {
+    font-size: 0.84rem;
+    color: #8db888;
+    line-height: 1.5;
+    margin: 0 0 1.75rem;
+  }
+
+  .notice-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .notice-btn {
+    display: block;
+    padding: 0.8rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    text-align: center;
+  }
+
+  .notice-btn.primary {
+    background: #d49a46;
+    color: #0b140d;
+    box-shadow: 0 2px 8px rgba(212, 154, 70, 0.3);
+  }
+
+  .notice-btn.primary:hover {
+    background: #e5aa55;
+  }
+
+  .notice-btn.secondary {
+    background: transparent;
+    color: #c7d8be;
+    border: 1px solid rgba(138, 171, 133, 0.3);
+  }
+
+  .notice-btn.secondary:hover {
+    color: #ffffff;
+    background: rgba(138, 171, 133, 0.15);
+  }
+
+  /* Responsive Rules: Hide minigame completely on mobile / touch widths <= 820px */
+  @media screen and (max-width: 820px) {
+    .desktop-expedition-wrap {
+      display: none !important;
     }
-    .hud-controls {
-      width: 100%;
-      justify-content: space-between;
-    }
-    .photo-modal-content {
-      flex-direction: column;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    .modal-image-view {
-      max-height: 280px;
+    .mobile-notice-card {
+      display: block !important;
     }
   }
 
-  @media (max-width: 600px) {
-    .hud-controls {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
+  @media screen and (min-width: 821px) {
+    .mobile-notice-card {
+      display: none !important;
     }
   }
 </style>

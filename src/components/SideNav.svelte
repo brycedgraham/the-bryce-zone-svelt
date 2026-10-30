@@ -9,7 +9,7 @@
     { to: "/Toolbox", label: "Toolbox", icon: "🪵" },
     { to: "/Experience", label: "Experience", icon: "📜" },
     { to: "/Photography", label: "Photography", icon: "📷" },
-    { to: "/BirdWatch", label: "Bird Watch", icon: "🐦" },
+    { to: "/BirdWatch", label: "Bird Watch", icon: "🐦", desktopOnly: true },
     { to: "/FavoriteBooks", label: "Favorite Books", icon: "📖" },
   ];
 
@@ -49,7 +49,7 @@
 
   <ul class="nav-list">
     {#each navItems as item (item.to)}
-      <li>
+      <li class={item.desktopOnly ? "desktop-only-nav-item" : ""}>
         <a
           href={item.to}
           class={isActive(item.to) ? "active" : ""}

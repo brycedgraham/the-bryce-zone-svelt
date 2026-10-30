@@ -251,4 +251,8 @@
   .sidebar-overlay {
     display: block;
   }
+
+  .desktop-only-nav-item {
+    display: none !important;
+  }
 }

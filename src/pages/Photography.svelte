@@ -198,19 +198,9 @@
     transform: translateY(-1px);
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 820px) {
     .expedition-callout-card {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0.75rem;
-      text-align: center;
-    }
-    .callout-content {
-      flex-direction: column;
-      text-align: center;
-    }
-    .callout-btn {
-      justify-content: center;
+      display: none !important;
     }
   }
 
