@@ -9,6 +9,7 @@
     { to: "/Toolbox", label: "Toolbox", icon: "🪵" },
     { to: "/Experience", label: "Experience", icon: "📜" },
     { to: "/Photography", label: "Photography", icon: "📷" },
+    { to: "/BirdWatch", label: "Bird Watch", icon: "🐦" },
     { to: "/FavoriteBooks", label: "Favorite Books", icon: "📖" },
   ];
 

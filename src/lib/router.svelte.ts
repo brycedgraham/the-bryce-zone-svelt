@@ -11,6 +11,7 @@ function normalizePath(rawPath: string): string {
   if (lower === '/experience') return '/Experience'
   if (lower === '/photography') return '/Photography'
   if (lower === '/favoritebooks') return '/FavoriteBooks'
+  if (lower === '/birdwatch') return '/BirdWatch'
   if (lower === '') return '/'
   return path
 }

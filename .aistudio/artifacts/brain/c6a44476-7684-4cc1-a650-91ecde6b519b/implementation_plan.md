@@ -1,163 +1,133 @@
-# Svelte 5 Porting Feasibility Investigation & Migration Roadmap
+# Forest Birdwatch: Telephoto Photography Minigame
 
-This investigation provides a comprehensive architectural feasibility assessment, comparative trade-off analysis, and phased execution roadmap for migrating "The Bryce Zone" (Bryce Graham's personal portfolio and visual field journal) from React 18 to Svelte 5 with modern runes on Vite.
-
----
+A serene, minimalist nature photography experience integrated as a dedicated tab within Bryce Graham's portfolio. Visitors peer through a high-magnification telephoto lens viewfinder cursor to track and photograph wild birds flitting through misty woodland branches, capturing candid wildlife snapshots for their personal field journal.
 
 ## User Review & Critical Decisions
 
 > [!IMPORTANT]
-> The primary objective is to deliver an in-depth feasibility report and actionable step-by-step migration blueprint, retaining the existing Vite build pipeline while transitioning from React 18 to Svelte 5 with modern runes and replacing all heavy React third-party libraries with bespoke, zero-dependency Svelte components.
-
-- **Goal & Deliverable**: Comprehensive feasibility report and execution roadmap (Confirmed in Phase 1).
-- **Target Framework & Version**: Svelte 5 (`^5.0.0`) with runes (`$state`, `$derived`, `$effect`, snippets) running inside the existing Vite configuration (Confirmed in Phase 1).
-- **Component Replacement Strategy**: Replace third-party React libraries (`yet-another-react-lightbox`, `react-grid-gallery`, `@trendmicro/react-sidenav`) with bespoke, accessible Svelte components that leverage modern CSS grid, native dialog/lightbox overlays, and touch/keyboard handlers (Confirmed in Phase 1).
-- **Routing Strategy**: Lightweight client-side hash or HTML5 history router (e.g., `tinro` or a zero-dependency Svelte 5 runes router store) preserving all canonical routes (`/`, `/Toolbox`, `/Experience`, `/Photography`, `/FavoriteBooks`).
+> The following directions have been confirmed based on your selections:
+> - **Navigation Location**: Dedicated "Bird Watch" tab in the main sidebar navigation with an entry card on the Photography page.
+> - **Game Mode**: Zen observation mode focused on peaceful immersion, instant photo previews, and saveable high-resolution captures.
+> - **Art Style**: Atmospheric layered woodland silhouettes with gentle wind-swayed pine and birch branches, soft drifting fog, and natural bird flight animations.
 
 ---
 
 ## 1. Overview & Core Concept
 
-### What the Application Is
-"The Bryce Zone" is a curated digital field journal and portfolio for Bryce Graham—Software Craftsman and Wilderness Photographer. It consists of 5 core views:
-1. **Home Base (`/`)**: Hero banner, digital craft intro, professional links (LinkedIn, GitHub), field guide navigation, and an embedded Goodreads quotes widget.
-2. **Toolbox (`/Toolbox`)**: Structured catalog of software engineering skills, languages, storage engines, cloud tools, and workflow systems.
-3. **Experience & Education (`/Experience`)**: Interactive vertical timeline of professional software developer roles and academic background.
-4. **Photography (`/Photography`)**: Live Flickr API integration fetching an album with an infinite-scroll photo gallery, zoomable lightbox viewer, and photo captions.
-5. **Favorite Books (`/FavoriteBooks`)**: Visual reading shelf displaying book covers, quotes, and Goodreads links loaded from local structured data.
-
-### Feasibility Verdict: Highly Feasible & Advantageous
-Porting this application to Svelte 5 is **100% feasible and technically advantageous**:
-- **Zero Framework Lock-in for Static Assets**: All 38+ book cover images, link graphics, and page metadata are framework-agnostic.
-- **Dramatically Smaller Bundle**: The current React bundle pulls in `react`, `react-dom`, `react-router-dom`, `yet-another-react-lightbox` (with zoom and thumbnail plugins), `react-grid-gallery`, and polyfills (`es6-promise`, `isomorphic-fetch`). Svelte compiles down to minimal vanilla JavaScript, reducing the JavaScript payload by approximately 65–75%.
-- **Runes Reactivity**: Svelte 5's fine-grained reactivity (`$state`, `$derived`, `$effect`) simplifies Flickr API pagination, infinite scrolling with `IntersectionObserver`, and modal dialog state without hook boilerplate or stale closure hazards.
-- **Unified Vite Pipeline**: Both React and Svelte integrate into Vite via their respective plugins (`@sveltejs/vite-plugin-svelte`). No build tooling overhaul is needed.
+- **What It Does**: Transports visitors to a living, minimalist forest sanctuary where delicate birds hop, preen, and flit between branch perches. The visitor's mouse cursor transforms into a 400mm camera viewfinder with an active telephoto optic that magnifies the forest in real-time. Clicking snaps an instantaneous photograph accompanied by a mechanical shutter sound and shutter-blade transition, displaying the framed photo before filing it into the field roll.
+- **Target Audience**: Visitors, portfolio reviewers, nature enthusiasts, and photography admirers seeking an interactive, memorable moment of calm reflection.
+- **Key Value**: Directly exemplifies Bryce's multidisciplinary identity as a software engineer and outdoor wilderness photographer by combining real-time canvas graphics, procedural animation, and photographic mechanics.
 
 ---
 
-## 2. User Experience & Visual Design Continuity
+## 2. User Experience & Visual Design
 
-The migration will strictly preserve and polish the application's nature-inspired "Field Journal" aesthetic:
+### Key User Flows
+1. **Entering Bird Watch**: The user selects "Bird Watch" in the sidebar navigation (or clicks the expedition link on the Photography page). The view opens with a full-viewport atmospheric woodland canvas, an unobtrusive camera HUD status strip at the top, and a subtle guide on camera controls.
+2. **Peering through the Lens**: Moving the mouse over the forest reveals the circular telephoto optic:
+   - Custom crosshair reticle, focal brackets `[   ]`, rule-of-thirds grid lines, and optical data (`400mm`, `f/2.8`, `1/2000s`).
+   - The circular lens glass smoothly magnifies the underlying forest and bird by 2.5x with crisp vector geometry and edge aberration.
+3. **Tracking the Bird**: A minimalist songbird (with selectable species like Mountain Bluebird, Cedar Waxwing, and Golden Finch) perches on swaying pine boughs, turns its head, flicks its tail, and gracefully swoops across the clearing to alternate perches in natural bezier flight arcs.
+4. **Snapping the Shot**:
+   - Left-clicking triggers an authentic mechanical shutter sound synthesized via the Web Audio API.
+   - A brief (100ms) exposure blackout / blade flash occurs.
+   - An instant preview card slides into view showing the captured telephoto photo with subject detection ("Candid Perch", "In Flight Flare", or "Canopy Landscape").
+5. **Reviewing the Field Roll**:
+   - Photos accumulate in an expandable bottom-drawer field roll.
+   - Clicking any photo opens a high-resolution inspection modal with camera EXIF details and one-click download.
 
 ### Visual Identity & Theme
-- **Color Discipline (60-30-10)**:
-  - **Canvas (60%)**: Deep woodland obsidian `#0d1710` and shadowy pine `#121f15` background gradients.
-  - **Structural Surfaces (30%)**: Frosted dark glass containers with subtle translucent borders (`rgba(138, 171, 133, 0.18)`), deep moss cards (`rgba(18, 29, 21, 0.6)`), and earthy parchment typography.
-  - **Focal Accents (10%)**: Golden lichen `#d49a46` and warm amber `#e0aa53` for active states, link interactions, and lightbox controls.
+- **Color Palette**:
+  - Dominant Woodland Canvas (60%): Deep hemlock green (`#0a140d`), pine bark (`#132218`), misty canopy wash (`#1c3324`), and dawn amber horizon gradient (`#2d4432` to `#e8c88c`).
+  - Structural UI & Framing (30%): Matte black anodized camera metal (`rgba(10, 16, 12, 0.85)`), frosted obsidian glass with subtle forest green border (`rgba(138, 171, 133, 0.2)`).
+  - Accent Budget (10%): Naturalist gold (`#e0aa53`) for focus locks and active controls; crisp optics white (`#f4f1ea`) for reticle markings.
 - **Typography**:
-  - Display & Section Headings: `Cinzel` serif / classical roman display.
-  - Body & Literature: `Lora` Georgia serif for book quotes and philosophical citations.
-  - UI Labels & Telemetry: Geometric sans (`system-ui`, `-apple-system`, `sans-serif`) with tabular numerals for counts and dates.
-- **Anti-Slop Discipline**:
-  - Clean unboxed metadata with subtle typographic separators (`·` or `—`).
-  - Strict 3-zone header and responsive collapsible navigation drawer.
-  - No decorative pulsating dots, fake telemetry tickers, or arbitrary AI badges.
+  - Display & Headings: `Cinzel` / `Outfit` for editorial naturalist gravitas.
+  - Camera Data & HUD: Tabular monospace (`JetBrains Mono` / `Courier New`, `tabular-nums`) for ISO, shutter speeds, and focal coordinates.
+  - Body & Notes: `Lora` serif for field notes and quote captions.
+- **Micro-Interactions**:
+  - Fluid cursor-following lens damping (`lerp` smoothing for cinematic handling).
+  - Subtle leaf/branch deflection when a bird lands on a perch.
+  - Interactive focal length zoom switcher (`200mm` wide-tele, `400mm` super-tele, `600mm` ultra-tele).
 
 ---
 
-## 3. Key Product Decisions & Component Replacements
+## 3. Key Product Decisions & Trade-Offs
 
-### Dependency & Architecture Comparison
+- **Decision 1: Dual-Pass High-Fidelity Canvas Rendering vs. CSS Lens Clip**:
+  - *Chosen Approach*: Real-time HTML5 2D Canvas utilizing coordinate transformation matrix clipping for the telephoto optic.
+  - *Why*: Ensures 60fps silky smooth rendering without DOM thrashing or CSS filter lag, allowing the magnified view to render the bird and branches with full vector sharpness rather than pixelated bitmap scaling.
+  - *Alternatives Considered*: CSS `backdrop-filter` or SVG clip-paths, which suffer from poor cross-browser performance and low resolution inside the zoom circle.
 
-| Feature / Concern | Current React 18 Implementation | Proposed Svelte 5 Equivalent | Rationale & Benefit |
-| :--- | :--- | :--- | :--- |
-| **Framework Runtime** | `react` (18.2.0) + `react-dom` (~130 KB minified) | `svelte` 5.x (~4–12 KB compiled output) | Virtual DOM overhead eliminated; pure direct DOM updates. |
-| **Build Plugin** | `@vitejs/plugin-react` | `@sveltejs/vite-plugin-svelte` | Zero server migration; instant HMR and drop-in Vite integration. |
-| **Routing** | `react-router-dom` (v6) with nested routes | Lightweight SPA Router (or Svelte 5 History Store) | Removes ~45 KB router bundle. Native browser History API integration with `$state(window.location.pathname)`. |
-| **Photo Gallery** | `react-grid-gallery` (1.0.1) | Bespoke CSS Grid / Flexbox Justified Layout component | Eliminates heavy layout recalculations in React JS runtime; leverages modern CSS `aspect-ratio` and grid. |
-| **Modal Lightbox** | `yet-another-react-lightbox` + zoom + thumbnail plugins (~110 KB bundle) | Bespoke native Svelte `<Lightbox />` with HTML5 `<dialog>` or overlay | Built-in keyboard navigation (`Escape`, Arrow keys), touch swipe, thumbnail strip, and fluid zoom animations using Svelte transitions. |
-| **Side Navigation** | `@trendmicro/react-sidenav` + custom CSS | Bespoke Svelte `<SideNav />` component | Full control over accessibility (`aria-expanded`, focus trap), responsive drawer animation, and no legacy CSS conflicts. |
-| **Async Fetching** | `isomorphic-fetch` + `build-url` + `es6-promise` | Native `fetch` + standard `URL` / `URLSearchParams` API | Browser-native modern APIs; zero external polyfill dependencies needed. |
-| **Script Injection** | `useRef` + `useEffect` imperative DOM injection (`GoodreadsQuotesWidget`) | Svelte `onMount` / `$effect` script mount | Natural component lifecycle with clean teardown. |
+- **Decision 2: Procedural Synthesis for Shutter Audio (Web Audio API)**:
+  - *Chosen Approach*: Lightweight Web Audio API synthesis generating the mechanical dual-action mirror slap and shutter curtain click.
+  - *Why*: Instant playback with zero network latency, zero broken external audio asset dependencies, and reliable cross-platform playback. Includes a simple mute toggle button.
+  - *Alternatives Considered*: External MP3 links, which fail in hermetic evaluation environments.
+
+- **Decision 3: Field Roll Persistence in Client Session**:
+  - *Chosen Approach*: Local reactive state with optional browser session storage for captured photos.
+  - *Why*: Immediate responsiveness without requiring external databases or user logins, keeping the minigame zen, private, and frictionless.
 
 ---
 
-## 4. Technical Architecture & Component Hierarchy
-
-### System Architecture Diagram
+## 4. Technical Architecture & Data Strategy
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                              Vite Server                               │
-│                   @sveltejs/vite-plugin-svelte                         │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │
-                         ┌──────────▼──────────┐
-                         │      App.svelte      │  (Global styles, fonts,
-                         │                      │   Router dispatch)
-                         └──────────┬──────────┘
-                                    │
-        ┌───────────────────────────┴───────────────────────────┐
-        │                                                       │
- ┌──────▼──────┐                                         ┌──────▼──────┐
- │ SideNav     │ (Responsive drawer,                      │ Page Router │
- │ .svelte     │  aria-current, active dot)              │ (Current    │
- └─────────────┘                                         │  Path Store)│
-                                                         └──────┬──────┘
-                                                                │
-     ┌───────────────────┬───────────────────┬──────────────────┼───────────────────┐
-     │                   │                   │                  │                   │
-┌────▼───────┐     ┌─────▼──────┐     ┌──────▼─────┐     ┌──────▼─────┐      ┌──────▼────────┐
-│ Home       │     │ Toolbox    │     │ Experience │     │ Photography│      │ FavoriteBooks │
-│ .svelte    │     │ .svelte    │     │ .svelte    │     │ .svelte    │      │ .svelte       │
-└────┬───────┘     └────────────┘     └────────────┘     └──────┬─────┘      └──────┬────────┘
-     │                                                          │                   │
-┌────▼────────┐                                          ┌──────▼──────┐     ┌──────▼───────┐
-│ Goodreads   │                                          │ PhotoGallery│     │ Book.svelte  │
-│ Widget      │                                          │ + Lightbox  │     │ (Cover, quote│
-└─────────────┘                                          └─────────────┘     │  Goodreads)  │
-                                                                             └──────────────┘
+│                              App.svelte                                │
+│                   │                                  │                 │
+│         ┌─────────┴─────────┐              ┌─────────┴─────────┐       │
+│         │   SideNav.svelte  │              │   router.svelte   │       │
+│         │ (New 'Bird Watch')│              │   (/BirdWatch)    │       │
+│         └───────────────────┘              └───────────────────┘       │
+└────────────────────────────────────┬───────────────────────────────────┘
+                                     ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                        pages/BirdWatch.svelte                          │
+│                                                                        │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │ Viewfinder HUD: [200mm | 400mm | 600mm] · [Mute] · [Reset Roll]  │  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+│                                                                        │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │                    Forest Canvas Viewport                        │  │
+│  │  - Background: Misty dawn gradient & distant pine silhouettes     │  │
+│  │  - Midground: Procedural swaying branches & drifting spores      │  │
+│  │  - Entities: Autonomous bird AI (perch, preen, swoop, bank)      │  │
+│  │  - Foreground: Detailed perches & leaf clusters                  │  │
+│  │  - Optic: Magnified telephoto lens cursor with camera HUD reticle│  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+│                                                                        │
+│  ┌─────────────────────────────────────┐  ┌─────────────────────────┐  │
+│  │      Instant Shutter Flash &        │  │   Field Roll Gallery    │  │
+│  │       Photo Snapshot Modal          │  │ (Save, Inspect, Export) │  │
+│  └─────────────────────────────────────┘  └─────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Component & State Mapping with Svelte 5 Runes
+### State Model & Entities
+- **Bird Entity**:
+  - `x`, `y`: Current 2D canvas coordinates.
+  - `state`: `'perched' | 'takeoff' | 'flying' | 'landing'`.
+  - `perchIndex`: Current target branch anchor.
+  - `wingAngle`, `facing`: Flap cycle and left/right orientation.
+  - `species`: Visual plumage configuration (e.g. Bluebird, Waxwing, Goldfinch).
+- **Viewfinder State**:
+  - `lensX`, `lensY`: Interpolated cursor position.
+  - `zoom`: Magnification factor ($2.0\times$, $3.2\times$, or $4.5\times$).
+  - `isHovering`: Visibility toggle for custom viewfinder reticle.
+  - `shutterActive`: Flash overlay animation flag.
+- **Photo Record**:
+  - `id`: Unique timestamp identifier.
+  - `dataUrl`: High-resolution canvas snapshot of the framed crop.
+  - `species`: Detected subject species.
+  - `focalLength`: e.g. "400mm".
+  - `subjectStatus`: `"Perched on Pine"`, `"Mid-Flight Flare"`, or `"Canopy Clearing"`.
+  - `timestamp`: Formatted field journal time string.
 
-1. **Reactive Page Navigation (`router.svelte.ts`)**:
-   ```typescript
-   class RouterState {
-     currentPath = $state(window.location.pathname);
-     navigate(path: string) {
-       window.history.pushState({}, '', path);
-       this.currentPath = path;
-     }
-   }
-   ```
-2. **Photography Gallery State (`FlickrGallery.svelte`)**:
-   - `$state` for `allImages`, `displayedImages`, `activeIndex`, `isLoading`, and `hasError`.
-   - `$derived` for `slides = allImages.map(img => ...)` and `isOpen = activeIndex >= 0`.
-   - `$effect` to bind `IntersectionObserver` to infinite scroll sentinel.
-3. **Bespoke Lightbox (`Lightbox.svelte`)**:
-   - Keyboard listener via Svelte `onkeydown` for ArrowLeft, ArrowRight, Escape.
-   - Svelte `fade` and `scale` transitions for smooth cinematic entry and exit.
-   - High-resolution zoom toggle and bottom thumbnail strip.
-
----
-
-## 5. Step-by-Step Migration Roadmap
-
-### Phase 1: Tooling & Package Configuration
-- Install Svelte 5 and official Vite plugin: `svelte` and `@sveltejs/vite-plugin-svelte`.
-- Remove legacy React dependencies: `react`, `react-dom`, `@types/react`, `@types/react-dom`, `@vitejs/plugin-react`, `react-router-dom`, `yet-another-react-lightbox`, `react-grid-gallery`, `@trendmicro/react-sidenav`, `build-url`, `es6-promise`, `isomorphic-fetch`.
-- Update `vite.config.ts` to replace React plugin with `svelte()`.
-- Update `tsconfig.json` to configure `"moduleResolution": "bundler"` and Svelte TS support.
-
-### Phase 2: Core Shell & Navigation
-- Create `src/lib/router.svelte.ts` (lightweight reactive route dispatcher).
-- Port `src/components/Header.tsx` to `src/components/Header.svelte`.
-- Port `src/components/navigation/SideNav.tsx` to `src/components/SideNav.svelte`, eliminating the `@trendmicro` dependency in favor of clean semantic markup and responsive CSS.
-- Port `src/components/Layout.tsx` to `src/components/Layout.svelte`.
-
-### Phase 3: Content Views
-- **Home**: Port `src/pages/index.tsx` and `GoodreadsQuotesWidget.tsx` to Svelte components.
-- **Toolbox**: Port `src/pages/Toolbox.tsx` to `Toolbox.svelte` (retaining the skill categories data model).
-- **Experience**: Port `src/pages/EducationExperience.tsx` to `Experience.svelte` (retaining timeline and education cards).
-- **FavoriteBooks**: Port `src/components/Book.tsx` and `src/pages/FavoriteBooks.tsx` to `Book.svelte` and `FavoriteBooks.svelte`, reading from `src/data/BookInfo.ts`.
-
-### Phase 4: Native Photography Gallery & Lightbox
-- Build bespoke `FlickrGallery.svelte` using modern CSS Grid with responsive columns and `aspect-ratio: 3/2` preview framing.
-- Integrate native `IntersectionObserver` with batch pagination for infinite scroll.
-- Build bespoke `Lightbox.svelte` with full-screen overlay, responsive image zoom, keyboard navigation, and thumbnail carousel.
-
-### Phase 5: Verification & Quality Assurance
-- Run `compile_applet` and test full production build with `npm run build`.
-- Verify all routes load without errors, Goodreads widget mounts and cleans up reliably, and Flickr photography gallery functions with high-resolution lightbox viewer.
-- Validate responsiveness across desktop, tablet, and mobile viewports.
+### Planned Source Modifications
+1. `src/lib/router.svelte.ts`: Add canonical mapping for `/BirdWatch`.
+2. `src/components/SideNav.svelte`: Add `"Bird Watch"` navigation item with camera/feather emblem.
+3. `src/App.svelte`: Register `/BirdWatch` route rendering `<BirdWatch />`.
+4. `src/pages/Photography.svelte`: Add an expedition card linking to the minigame.
+5. `src/pages/BirdWatch.svelte`: Build the complete canvas game engine, telephoto optics renderer, audio synthesizer, and field photo album.

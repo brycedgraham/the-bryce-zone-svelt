@@ -22,6 +22,19 @@
     <div class="photo-hint-pill">
       <span aria-hidden="true">🔍</span> Tap or click any image to view in high-resolution field lightbox
     </div>
+
+    <div class="expedition-callout-card">
+      <div class="callout-content">
+        <span class="callout-icon" aria-hidden="true">🐦</span>
+        <div class="callout-text">
+          <span class="callout-title">Interactive Field Minigame</span>
+          <p class="callout-desc">Track and snap wild birds in the forest with a live telephoto viewfinder lens.</p>
+        </div>
+      </div>
+      <a href="/BirdWatch" class="callout-btn">
+        Start Bird Watch ➔
+      </a>
+    </div>
   </div>
 
   <div class="gallery-wrapper-card">
@@ -118,6 +131,87 @@
     padding: 0.3rem 0.85rem;
     border-radius: 6px;
     border: 1px solid rgba(138, 171, 133, 0.16);
+    margin-bottom: 1.25rem;
+  }
+
+  .expedition-callout-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    max-width: 680px;
+    margin: 0 auto;
+    background: rgba(20, 34, 25, 0.8);
+    border: 1px solid rgba(212, 154, 70, 0.35);
+    border-radius: 12px;
+    padding: 0.85rem 1.25rem;
+    text-align: left;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+  }
+
+  .callout-content {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .callout-icon {
+    font-size: 1.5rem;
+    background: rgba(212, 154, 70, 0.15);
+    padding: 0.4rem 0.55rem;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 154, 70, 0.3);
+  }
+
+  .callout-title {
+    display: block;
+    font-family: var(--font-display, "Cinzel", serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #f7eed7;
+    margin-bottom: 0.15rem;
+  }
+
+  .callout-desc {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #a3c4a2;
+    line-height: 1.4;
+  }
+
+  .callout-btn {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    background: #d49a46;
+    color: #0b140d;
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+
+  .callout-btn:hover {
+    background: #e5aa55;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 640px) {
+    .expedition-callout-card {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+      text-align: center;
+    }
+    .callout-content {
+      flex-direction: column;
+      text-align: center;
+    }
+    .callout-btn {
+      justify-content: center;
+    }
   }
 
   .gallery-wrapper-card {

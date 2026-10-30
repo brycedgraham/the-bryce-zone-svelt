@@ -4,6 +4,7 @@
   import Toolbox from "./pages/Toolbox.svelte";
   import EducationExperience from "./pages/EducationExperience.svelte";
   import Photography from "./pages/Photography.svelte";
+  import BirdWatch from "./pages/BirdWatch.svelte";
   import FavoriteBooks from "./pages/FavoriteBooks.svelte";
   import { router } from "./lib/router.svelte";
 
@@ -19,6 +20,8 @@
     <EducationExperience />
   {:else if currentPath === "/Photography"}
     <Photography />
+  {:else if currentPath === "/BirdWatch"}
+    <BirdWatch />
   {:else if currentPath === "/FavoriteBooks"}
     <FavoriteBooks />
   {:else}
